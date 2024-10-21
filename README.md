@@ -1,4 +1,4 @@
-# **Mendyfi Radius** #
+# **Hotspot Radius** #
 
     Created By Mendy
     Portfolio: https://mendiola.pages.dev

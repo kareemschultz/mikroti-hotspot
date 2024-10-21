@@ -91,7 +91,7 @@ class Generated extends Component
             'batch_code',
             'reseller_name'
         )
-        ->paginate(10,['*'],'batch');
+        ->paginate($this->perPage, ['*'], 'batch'); // Use $this->perPage instead of 10
     }
 
     #[Computed()]
