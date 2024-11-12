@@ -84,18 +84,22 @@ docker compose run --rm artisan migrate:fresh --seed
 
 Edit .env and Change the "CENTRAL_DOMAINS"
 
-This is optional you can Access Admin page using your IP Address
+This is optional you can Access Admin Page on the Domain Provided
 
 ![Template](preview/central_domains.png)
 
 ```
 ...
-CENTRAL_DOMAINS=yourdomain, 127.0.0.1
+CENTRAL_DOMAINS=yourdomain
 ...
 ```
 
 ### - **LOGIN TO ADMIN PAGE**
-Goto http://< you ip or domain >/auth/login
+If provide domain in "CENTRAL_DOMAINS"
+Goto http://< your domain >/auth/login
+
+If dont,
+Goto http://< your ip>:8090/auth/login
 
 ![Template](preview/admin_login.png)
 
@@ -125,6 +129,18 @@ Modify the .env file to extend the number of days you want to keep backups.
 ```
 DB_BACKUP_INTERVAL=7 #in Days
 ```
+
+## - **TP-LINK EAP STANDALONE CONFIG**
+
+You dont need a Controller for This Setup, Just a TP-LINK EAP AP and a Server that runs Mendyfi Radius
+
+Check this Sample Config for your Guide: [Click Here](preview/tp-link.pdf)
+
+## - **MIKROTIK CONFIG**
+
+Check this Sample Config for your Guide: [Click Here](preview/mikrotik.pdf)
+
+For Configuring Mikrotik to Use RADIUS: [Click Here](https://youtu.be/rgbyYfFOg6o?t=374)
 
 ## Buy me a Coffee
 
