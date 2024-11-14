@@ -56,7 +56,7 @@ https://github.com/mendylivium/docker-ubuntu
 
 Clone this repository. Run the following command:
 ```
-git clone https://github.com/mendylivium/mendyfi-hotspot.git
+git clone https://github.com/mendylivium/mendyfi-radius.git
 ```
 
 Move to the project directory:
@@ -111,7 +111,9 @@ Password: admin@1234
 
 ### - **ADDING USER/DOMAIN**
 
-Add User / Domain
+Note: It is recommended to have a domain to add more users by using subdomains, e.g., user1.domain.com, user2.domain.com, and so on. This allows each user to access their client page, such as http://user1.domain.com/client/auth/login and http://user2.domain.com/client/auth/login.
+
+If you want to use this system with a single client account, you can use the IP address instead, allowing access to the client page at http://<ip_address>/client/auth/login.( where <ip_address> is the IP of the System Public or Local IP)
 
 ![Template](preview/admin_add_domain.png)
 
@@ -135,6 +137,12 @@ DB_BACKUP_INTERVAL=7 #in Days
 You dont need a Controller for This Setup, Just a TP-LINK EAP AP and a Server that runs Mendyfi Radius
 
 Check this Sample Config for your Guide: [Click Here](preview/tp-link.pdf)
+
+## - **TP-LINK OMADA CONTROLLER CONFIG**
+
+You need a Omada Controller for This Setup.
+
+Check this Sample Config for your Guide: [Click Here](preview/omada.pdf)
 
 ## - **MIKROTIK CONFIG**
 
