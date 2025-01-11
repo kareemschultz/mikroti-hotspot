@@ -61,7 +61,7 @@ git clone https://github.com/mendylivium/mendyfi-radius.git
 
 Move to the project directory:
 ```
-cd mendyfi-hotspot
+cd mendyfi-radius
 ```
 
 Run All Containers
