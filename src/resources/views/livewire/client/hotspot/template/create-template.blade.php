@@ -67,6 +67,15 @@
                     </li>
 
                     <li>
+                        <span class="text text-info">"voucher.password"</span>
+                        <ul>
+                            <li class="text-xs">
+                                The Password of Voucher
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
                         <span class="text text-info">"voucher.description"</span>
                         <ul>
                             <li class="text-xs">
