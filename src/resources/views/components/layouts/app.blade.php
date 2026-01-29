@@ -45,10 +45,10 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/sb-admin-2.min.css') }}?v={{ filemtime(public_path('css/sb-admin-2.min.css')) }}" rel="stylesheet">
     
     <!-- UI/UX Refinements -->
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}?v={{ filemtime(public_path('css/custom.css')) }}" rel="stylesheet">
 
     {{-- Dynamic Brand Colors --}}
     <style>
@@ -187,7 +187,7 @@
     <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+    <script src="{{ asset('js/sb-admin-2.min.js') }}?v={{ filemtime(public_path('js/sb-admin-2.min.js')) }}"></script>
     
     <!-- Mobile Responsiveness Helpers -->
     <script>
