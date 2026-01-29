@@ -58,14 +58,38 @@
         .sidebar.toggled .nav-item .nav-link { display: block !important; width: 100% !important; text-align: left !important; padding: 0.75rem 1rem !important; }
         .sidebar.toggled .nav-item .nav-link i { font-size: 0.85rem !important; margin-right: 0.25rem !important; }
         .sidebar.toggled .nav-item .nav-link span { font-size: 0.85rem !important; display: inline !important; }
-        .sidebar.toggled .nav-item .collapse { position: relative !important; left: 0 !important; top: 0 !important; z-index: 1 !important; animation: none !important; -webkit-animation: none !important; margin: 0 1rem !important; }
-        .sidebar.toggled .nav-item .collapse .collapse-inner { border-radius: 0 !important; box-shadow: none !important; }
-        .sidebar.toggled .nav-item .collapsing { display: block !important; transition: height 0.15s ease !important; position: relative !important; left: 0 !important; top: 0 !important; margin: 0 1rem !important; }
-        .sidebar.toggled .nav-item .collapsing .collapse-inner { border-radius: 0 !important; box-shadow: none !important; }
+        .sidebar.toggled .nav-item .collapse { position: relative !important; left: 0 !important; top: 0 !important; z-index: 1 !important; animation: none !important; -webkit-animation: none !important; margin: 0 0.5rem !important; }
+        .sidebar.toggled .nav-item .collapsing { display: block !important; transition: height 0.15s ease !important; position: relative !important; left: 0 !important; top: 0 !important; margin: 0 0.5rem !important; }
         .sidebar.toggled .nav-item .nav-link[data-toggle="collapse"]::after { width: 1rem; text-align: center; float: right; font-weight: 900; content: '\f107'; font-family: 'Font Awesome 5 Free'; display: inline-block !important; }
         .sidebar.toggled .nav-item .nav-link[data-toggle="collapse"].collapsed::after { content: '\f105'; }
         .sidebar.toggled .sidebar-brand .sidebar-brand-text { display: inline !important; }
         .sidebar.toggled .sidebar-heading { text-align: left !important; }
+
+        /* Sub-menu items blend with sidebar (not white popup) */
+        .sidebar.toggled .nav-item .collapse .collapse-inner,
+        .sidebar.toggled .nav-item .collapsing .collapse-inner {
+            background: rgba(255,255,255,0.1) !important;
+            border-radius: 0.35rem !important;
+            box-shadow: none !important;
+            padding: 0.5rem 0 !important;
+        }
+        .sidebar.toggled .nav-item .collapse .collapse-inner .collapse-item,
+        .sidebar.toggled .nav-item .collapsing .collapse-inner .collapse-item {
+            color: rgba(255,255,255,0.85) !important;
+            padding: 0.6rem 1rem !important;
+            font-size: 0.82rem !important;
+        }
+        .sidebar.toggled .nav-item .collapse .collapse-inner .collapse-item:hover,
+        .sidebar.toggled .nav-item .collapsing .collapse-inner .collapse-item:hover {
+            background: rgba(255,255,255,0.15) !important;
+            color: #fff !important;
+        }
+        .sidebar.toggled .nav-item .collapse .collapse-inner .collapse-item.active,
+        .sidebar.toggled .nav-item .collapsing .collapse-inner .collapse-item.active {
+            color: #fff !important;
+            font-weight: 700;
+            background: rgba(255,255,255,0.2) !important;
+        }
     }
     </style>
 
