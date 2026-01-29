@@ -282,5 +282,116 @@ class TenantDefaultsSeeder
             'created_at' => $now,
             'updated_at' => $now,
         ]);
+
+        // Template 3: Black & White (monochrome printer friendly)
+        $bwTemplateHead = 'body {
+    font-family: "Courier New", Courier, monospace;
+    margin: 0;
+    padding: 5px;
+    background-color: #fff;
+    color: #000;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.voucher {
+    width: 170px;
+    border: 2px solid #000;
+    margin: 4px;
+    display: inline-block;
+    background: #fff;
+}
+.header {
+    background: #000 !important;
+    color: #fff !important;
+    padding: 6px 8px;
+    font-weight: bold;
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+}
+.content {
+    padding: 6px 8px;
+    font-size: 10px;
+}
+.code-label {
+    font-size: 9px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-top: 4px;
+}
+.code {
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    padding: 4px;
+    margin: 4px 0;
+    border: 2px dashed #000;
+    letter-spacing: 2px;
+}
+.divider {
+    border-top: 1px solid #000;
+    margin: 4px 0;
+}
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 0;
+    font-size: 10px;
+}
+.info-row .label {
+    font-weight: bold;
+}
+@media print {
+    body { margin: 0; padding: 2px; }
+    .voucher { page-break-inside: avoid; border: 2px solid #000; }
+    .header { background: #000 !important; color: #fff !important; }
+}
+@page {
+    size: auto;
+    margin: 5mm;
+}';
+
+        $bwTemplateBody = '<div class="voucher">
+    <div class="header">
+        <span x-text="voucher.profile"></span>
+        <span x-text="\'#\' + voucher.id"></span>
+    </div>
+    <div class="content">
+        <div class="code-label">Voucher Code</div>
+        <div class="code" x-text="voucher.code"></div>
+        <div class="divider"></div>
+        <div class="info-row">
+            <span class="label">Price:</span>
+            <span x-text="voucher.price"></span>
+        </div>
+        <div class="info-row" x-show="voucher.time_limit">
+            <span class="label">Time:</span>
+            <span x-text="voucher.time_limit"></span>
+        </div>
+        <div class="info-row" x-show="voucher.validity">
+            <span class="label">Valid:</span>
+            <span x-text="voucher.validity"></span>
+        </div>
+        <div class="info-row" x-show="voucher.data_limit">
+            <span class="label">Data:</span>
+            <span x-text="voucher.data_limit"></span>
+        </div>
+    </div>
+</div>';
+
+        DB::table('voucher_templates')->insert([
+            'user_id' => $userId,
+            'name' => 'Black-White-Print',
+            'head' => $bwTemplateHead,
+            'body' => $bwTemplateBody,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
     }
 }
