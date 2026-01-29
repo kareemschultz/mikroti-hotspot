@@ -160,7 +160,7 @@ class TenantDefaultsSeeder
 
         DB::table('voucher_templates')->insert([
             'user_id' => $userId,
-            'name' => 'fancy-template',
+            'name' => 'Modern Blue',
             'head' => $fancyTemplateHead,
             'body' => $fancyTemplateBody,
             'created_at' => $now,
@@ -276,85 +276,74 @@ class TenantDefaultsSeeder
 
         DB::table('voucher_templates')->insert([
             'user_id' => $userId,
-            'name' => 'Fancy-Template-QR',
+            'name' => 'Modern Blue (QR)',
             'head' => $fancyTemplateQRHead,
             'body' => $fancyTemplateQRBody,
             'created_at' => $now,
             'updated_at' => $now,
         ]);
 
-        // Template 3: Black & White (monochrome printer friendly)
+        // Template 3: Modern Black (monochrome version of Modern Blue)
         $bwTemplateHead = 'body {
-    font-family: "Courier New", Courier, monospace;
+    font-family: Arial, sans-serif;
     margin: 0;
-    padding: 5px;
+    padding: 10px;
     background-color: #fff;
-    color: #000;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
 }
 .voucher {
-    width: 170px;
+    width: 180px;
+    background-color: white;
     border: 2px solid #000;
-    margin: 4px;
+    border-radius: 8px;
+    margin: 5px;
     display: inline-block;
-    background: #fff;
+    overflow: hidden;
 }
 .header {
-    background: #000 !important;
-    color: #fff !important;
-    padding: 6px 8px;
+    background-color: #000;
+    color: white;
+    padding: 8px;
     font-weight: bold;
-    font-size: 11px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    color-adjust: exact;
+    font-size: 12px;
 }
 .content {
-    padding: 6px 8px;
-    font-size: 10px;
-}
-.code-label {
-    font-size: 9px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-align: center;
-    margin-top: 4px;
+    padding: 8px;
+    font-size: 11px;
 }
 .code {
+    color: #000;
     font-weight: bold;
-    font-size: 16px;
-    text-align: center;
-    padding: 4px;
-    margin: 4px 0;
+    font-size: 14px;
+    margin: 5px 0;
+    padding: 3px;
     border: 2px dashed #000;
-    letter-spacing: 2px;
+    border-radius: 4px;
+    text-align: center;
 }
-.divider {
-    border-top: 1px solid #000;
-    margin: 4px 0;
+.label {
+    font-weight: bold;
+    color: #333;
+}
+.value {
+    float: right;
 }
 .info-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 2px 0;
-    font-size: 10px;
-}
-.info-row .label {
-    font-weight: bold;
+    margin-bottom: 3px;
+    clear: both;
 }
 @media print {
-    body { margin: 0; padding: 2px; }
+    body { margin: 0; background-color: white; }
     .voucher { page-break-inside: avoid; border: 2px solid #000; }
-    .header { background: #000 !important; color: #fff !important; }
-}
-@page {
-    size: auto;
-    margin: 5mm;
+    .header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        color-adjust: exact;
+        background-color: #000 !important;
+        color: white !important;
+    }
 }';
 
         $bwTemplateBody = '<div class="voucher">
@@ -363,31 +352,30 @@ class TenantDefaultsSeeder
         <span x-text="\'#\' + voucher.id"></span>
     </div>
     <div class="content">
-        <div class="code-label">Voucher Code</div>
+        <div class="label">VOUCHER CODE</div>
         <div class="code" x-text="voucher.code"></div>
-        <div class="divider"></div>
         <div class="info-row">
             <span class="label">Price:</span>
-            <span x-text="voucher.price"></span>
+            <span class="value" x-text="voucher.price"></span>
         </div>
-        <div class="info-row" x-show="voucher.time_limit">
+        <div class="info-row">
             <span class="label">Time:</span>
-            <span x-text="voucher.time_limit"></span>
+            <span class="value" x-text="voucher.time_limit"></span>
         </div>
-        <div class="info-row" x-show="voucher.validity">
+        <div class="info-row">
             <span class="label">Valid:</span>
-            <span x-text="voucher.validity"></span>
+            <span class="value" x-text="voucher.validity"></span>
         </div>
         <div class="info-row" x-show="voucher.data_limit">
             <span class="label">Data:</span>
-            <span x-text="voucher.data_limit"></span>
+            <span class="value" x-text="voucher.data_limit"></span>
         </div>
     </div>
 </div>';
 
         DB::table('voucher_templates')->insert([
             'user_id' => $userId,
-            'name' => 'Black-White-Print',
+            'name' => 'Modern Black',
             'head' => $bwTemplateHead,
             'body' => $bwTemplateBody,
             'created_at' => $now,
