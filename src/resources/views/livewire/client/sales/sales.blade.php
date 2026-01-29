@@ -107,8 +107,76 @@
                     </div>
                 </div>
 
-                {{-- Sales Table --}}
-                <div class="table-responsive">
+                {{-- Mobile Card View --}}
+                <div class="mobile-card-view">
+                    @forelse ($this->sales as $sale)
+                        <div class="voucher-card-mobile">
+                            <div class="card-header-mobile">
+                                <span class="voucher-code">{{ $sale->code }}</span>
+                                <div class="d-flex align-items-center">
+                                    <x-partials.profile-badge 
+                                        :name="$sale->profile_name ?? 'N/A'" 
+                                        :uptime-limit="$sale->uptime_limit ?? 0"
+                                        :data-limit="$sale->data_limit ?? 0" />
+                                </div>
+                            </div>
+                            <div class="card-body-mobile">
+                                <div class="data-item">
+                                    <span class="data-label">Reseller</span>
+                                    <span class="data-value">
+                                        @if($sale->reseller_name)
+                                            <span class="badge badge-info">{{ $sale->reseller_name }}</span>
+                                        @else
+                                            <span class="info-value-muted">Direct</span>
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Session Info</span>
+                                    <span class="data-value">
+                                        <small>
+                                            {{ $this->isRandomMac($sale->mac_address) ? 'Random ' : '' }}MAC: {{ $sale->mac_address ?? 'N/A' }}<br>
+                                            IP: {{ $sale->ip_address ?? 'N/A' }}<br>
+                                            Router: {{ $sale->router_ip ?? 'N/A' }}{{ $sale->server_name ? " - {$sale->server_name}" : '' }}
+                                        </small>
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Price</span>
+                                    <span class="data-value">
+                                        <x-partials.price-display :price="$sale->amount" />
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Date</span>
+                                    <span class="data-value" style="font-size: 0.8rem;">
+                                        {{ Illuminate\Support\Carbon::parse($sale->transact_date)->format('M d, Y h:i A') }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="table-empty-state">
+                            <i class="fas fa-chart-line"></i>
+                            <p>No sales records found</p>
+                        </div>
+                    @endforelse
+                    
+                    {{-- Mobile Page Total --}}
+                    @if($this->sales->count() > 0)
+                    <div class="card mt-3" style="background: #f8f9fc; border: 1px solid #e3e6f0;">
+                        <div class="card-body py-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong class="info-label">Page Total:</strong>
+                                <span class="price-value font-weight-bold">{{ number_format($this->sales->sum('amount'), 2) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+
+                {{-- Desktop Table View --}}
+                <div class="table-responsive desktop-table-view">
                     <table class="table table-standard table-striped">
                         <thead>
                             <tr>

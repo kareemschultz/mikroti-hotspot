@@ -45,7 +45,78 @@
                     </div>
                 </div>
                 @endif
-                <div class="table-responsive">
+                {{-- Mobile Card View --}}
+                <div class="mobile-card-view">
+                    @forelse ($this->resellers as $reseller)
+                        <div class="voucher-card-mobile {{ $reseller->status == 'suspended' ? 'border-danger' : '' }}">
+                            <div class="card-header-mobile">
+                                <div class="d-flex align-items-center">
+                                    <input type="checkbox" wire:model.live="selectedItems"
+                                        value="{{ $reseller->id }}" class="checkbox-standard mr-3">
+                                    <div>
+                                        <span class="voucher-code">ID: {{ $reseller->id }}</span>
+                                        <div class="small text-muted">{{ $reseller->name }}</div>
+                                    </div>
+                                </div>
+                                @if($reseller->status == 'suspended')
+                                    <span class="badge status-suspended">
+                                        <i class="fas fa-ban mr-1"></i>Suspended
+                                    </span>
+                                @else
+                                    <span class="badge status-enabled">
+                                        <i class="fas fa-check mr-1"></i>{{ ucfirst($reseller->status) }}
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="card-body-mobile">
+                                <div class="data-item">
+                                    <span class="data-label">Vouchers</span>
+                                    <span class="data-value">
+                                        Available: {{ $reseller->available_vouchers }}<br>
+                                        Active: {{ $reseller->active_vouchers }}
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Today/Yesterday</span>
+                                    <span class="data-value">
+                                        <span class="price-value">{{ number_format($reseller->earnToday, 2) }}</span> / {{ number_format($reseller->earnYesterday, 2) }}
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Week/Month</span>
+                                    <span class="data-value">
+                                        {{ number_format($reseller->earnThisWeek, 2) }} / {{ number_format($reseller->earnThisMonth, 2) }}
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Last/Total</span>
+                                    <span class="data-value">
+                                        {{ number_format($reseller->earnLastMonth, 2) }} / <span class="price-value font-weight-bold">{{ number_format($reseller->total_sales, 2) }}</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card-actions-mobile">
+                                <a href="{{ route('client.reseller.edit', $reseller->id) }}"
+                                    class="btn btn-action btn-action-edit">
+                                    <i class="fas fa-edit"></i>Edit
+                                </a>
+                                <button class="btn btn-action btn-action-delete"
+                                    wire:click="delete({{ $reseller->id }})"
+                                    wire:confirm.prompt="Are you sure?\nThis will delete all vouchers under this reseller\n\nType {{ $reseller->id }} to confirm|{{ $reseller->id }}">
+                                    <i class="fas fa-trash"></i>Delete
+                                </button>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="table-empty-state">
+                            <i class="fas fa-users"></i>
+                            <p>No registered resellers</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                {{-- Desktop Table View --}}
+                <div class="table-responsive desktop-table-view">
                     <table class="table table-standard table-striped">
                         <thead>
                             <tr>

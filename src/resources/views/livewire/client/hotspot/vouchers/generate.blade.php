@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-12">
         <div class="card shadow mb-4">
             <div class="card-header d-flex justify-content-between py-3">
                 <h6 class="m-0 text-primary">Generate Hotspot Vouchers</h6>
@@ -35,7 +35,7 @@
                             <hr>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-12 col-md-4">
                             <div class="form-group">
                                 <label class="text text-xs mb-0">Voucher Code Prefix:</label>
                                 <input type="text" wire:model="voucherPrefix"
@@ -46,9 +46,9 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6"></div>
+                        <div class="col-md-8 d-none d-md-block"></div>
 
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label class="text text-xs mb-0">Character Pattern:</label>
                                 <select wire:model="voucherPattern" class="form-control">
@@ -61,7 +61,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label class="text text-xs mb-0">Character Length:</label>
                                 <input type="number" wire:model="voucherPatternLength"
@@ -72,7 +72,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label class="text text-xs mb-0">Password Pattern:</label>
                                 <select wire:model="passwordPattern" class="form-control">
@@ -87,7 +87,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label class="text text-xs mb-0">Password Length:</label>
                                 <input type="number" wire:model="voucherPasswordLength"
@@ -98,7 +98,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label class="text text-xs mb-0">Profile:</label>
                                 <div class="input-group">
@@ -124,7 +124,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-12 col-md-4">
                             <div class="form-group">
                                 <label class="text text-xs mb-0">Quantity:</label>
                                 <input type="number" wire:model="voucherQty"
@@ -139,8 +139,8 @@
                         <span class="text text-xs text-danger">{{ $message }}</span>
                     @enderror
                     <hr>
-                    <div class="d-flex justify-content-start">
-                        <a class="btn btn-secondary mr-2" href="{{ route('client.vouchers.list') }}">Cancel</a>
+                    <div class="d-flex flex-column flex-md-row justify-content-start">
+                        <a class="btn btn-secondary mr-md-2 mb-2 mb-md-0" href="{{ route('client.vouchers.list') }}">Cancel</a>
                         <button class="btn btn-primary" type="submit">Generate</button>
                     </div>
                 </form>

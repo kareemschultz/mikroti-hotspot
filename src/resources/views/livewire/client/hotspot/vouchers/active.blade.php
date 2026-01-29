@@ -42,7 +42,123 @@
                     </div>
                 </div>
                 @endif
-                <div class="table-responsive">
+                {{-- Mobile Card View --}}
+                <div class="mobile-card-view">
+                    @forelse ($this->voucher as $voucher)
+                        @php
+                            $timeRemaining = $this->getTimeRemaining($voucher);
+                            $timePercentage = $this->getTimePercentage($voucher);
+                            $dataPercentage = $this->getDataPercentage($voucher);
+                            $timeColor = $this->getStatusColor($timePercentage);
+                            $dataColor = $this->getStatusColor($dataPercentage);
+                            
+                            $worstPercentage = min($timePercentage ?? 100, $dataPercentage ?? 100);
+                            $cardClass = '';
+                            if ($worstPercentage <= 25) {
+                                $cardClass = 'border-danger';
+                            } elseif ($worstPercentage <= 50) {
+                                $cardClass = 'border-warning';
+                            }
+                        @endphp
+                        <div class="voucher-card-mobile {{ $cardClass }}">
+                            <div class="card-header-mobile">
+                                <div class="d-flex align-items-center">
+                                    <input type="checkbox" wire:model.live="selectedItems"
+                                        value="{{ $voucher->id }}" class="checkbox-standard mr-3">
+                                    <span class="voucher-code">{{ $voucher->code }}</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge status-active mr-2">Active</span>
+                                    <x-partials.profile-badge 
+                                        :name="$voucher->profile_name" 
+                                        :uptime-limit="$voucher->uptime_limit ?? 0"
+                                        :data-limit="$voucher->data_limit ?? 0" />
+                                </div>
+                            </div>
+                            <div class="card-body-mobile">
+                                <div class="data-item">
+                                    <span class="data-label">Session Info</span>
+                                    <span class="data-value">
+                                        <small>
+                                            {{ $this->isRandomMac($voucher->mac_address) ? 'Random ' : '' }}MAC: {{ $voucher->mac_address ?? 'N/A' }}<br>
+                                            IP: {{ $voucher->ip_address ?? 'N/A' }}<br>
+                                            Router: {{ $voucher->router_ip ?? 'N/A' }}{{ $voucher->server_name ? " - {$voucher->server_name}" : '' }}
+                                        </small>
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Time Remaining</span>
+                                    <span class="data-value">
+                                        @if($timePercentage !== null)
+                                            <span class="badge badge-{{ $timeColor }}">
+                                                <i class="fas fa-clock mr-1"></i>{{ $timeRemaining['text'] ?? 'N/A' }}
+                                            </span>
+                                            <br><small>{{ round($timePercentage) }}% remaining</small>
+                                        @else
+                                            <span class="badge badge-profile-unlimited">
+                                                <i class="fas fa-infinity mr-1"></i>Unlimited
+                                            </span>
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Data Remaining</span>
+                                    <span class="data-value">
+                                        @if($voucher->data_limit > 0)
+                                            <span class="badge badge-{{ $dataColor }}">
+                                                <i class="fas fa-database mr-1"></i>{{ $this->convertBytes($voucher->data_credit) }}
+                                            </span>
+                                            <br><small>{{ round($dataPercentage ?? 0) }}% of {{ $this->convertBytes($voucher->data_limit) }}</small>
+                                        @else
+                                            <span class="badge badge-profile-unlimited">
+                                                <i class="fas fa-infinity mr-1"></i>Unlimited
+                                            </span>
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Price</span>
+                                    <span class="data-value">
+                                        <x-partials.price-display :price="$voucher->price" />
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Transfer</span>
+                                    <span class="data-value">
+                                        <small>
+                                            ↓ {{ $this->convertBytes($voucher->session_download) }}<br>
+                                            ↑ {{ $this->convertBytes($voucher->session_upload) }}
+                                        </small>
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Dates</span>
+                                    <span class="data-value">
+                                        <small>
+                                            Used: {{ $voucher->used_date ? Illuminate\Support\Carbon::parse($voucher->used_date)->format('M d, Y h:i A') : 'N/A' }}<br>
+                                            Expires: {{ $voucher->expire_date ? Illuminate\Support\Carbon::parse($voucher->expire_date)->format('M d, Y h:i A') : 'N/A' }}
+                                        </small>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card-actions-mobile">
+                                <button class="btn btn-action btn-action-disconnect"
+                                    wire:confirm.prompt="Disconnect user?\n\nType {{ substr($voucher->id, -5) }} to confirm|{{ substr($voucher->id, -5) }}"
+                                    wire:click="disconnect({{ $voucher->id }})">
+                                    <i class="fas fa-ban"></i>Disconnect
+                                </button>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="table-empty-state">
+                            <i class="fas fa-wifi"></i>
+                            <p>No active vouchers/users found</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                {{-- Desktop Table View --}}
+                <div class="table-responsive desktop-table-view">
                     <table class="table table-standard table-striped">
                         <thead>
                             <tr>

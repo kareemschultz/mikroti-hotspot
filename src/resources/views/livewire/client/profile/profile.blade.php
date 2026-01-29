@@ -29,7 +29,77 @@
                     </div>
                 </div>
                 @endif
-                <div class="table-responsive">
+                {{-- Mobile Card View --}}
+                <div class="mobile-card-view">
+                    @forelse ($this->profiles as $profile)
+                        <div class="voucher-card-mobile">
+                            <div class="card-header-mobile">
+                                <div class="d-flex align-items-center">
+                                    <input type="checkbox" wire:model.live="selectedItems"
+                                        value="{{ $profile->id }}" class="checkbox-standard mr-3">
+                                    <span class="voucher-code">{{ $profile->name }}</span>
+                                </div>
+                                <x-partials.profile-badge 
+                                    :name="$profile->name" 
+                                    :uptime-limit="$profile->uptime_limit ?? 0"
+                                    :data-limit="$profile->data_limit ?? 0"
+                                    :validity="$profile->validity ?? 0" />
+                            </div>
+                            <div class="card-body-mobile">
+                                <div class="data-item">
+                                    <span class="data-label">Description</span>
+                                    <span class="data-value">{{ $profile->description ?: 'N/A' }}</span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Price</span>
+                                    <span class="data-value">
+                                        <x-partials.price-display :price="$profile->price" />
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Bandwidth</span>
+                                    <span class="data-value">
+                                        <small>
+                                            ↑ {{ $profile->max_upload >= 1 ? "{$this->convertBytes($profile->max_upload)}ps" : 'Unlimited' }}<br>
+                                            ↓ {{ $profile->max_download >= 1 ? "{$this->convertBytes($profile->max_download)}ps" : 'Unlimited' }}
+                                        </small>
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Data Limit</span>
+                                    <span class="data-value">{{ $profile->data_limit >= 1 ? "{$this->convertBytes($profile->data_limit)}" : 'Unlimited' }}</span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Time Limit</span>
+                                    <span class="data-value">{{ $profile->uptime_limit >= 1 ? "{$this->convertSeconds($profile->uptime_limit)}" : 'None' }}</span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Validity</span>
+                                    <span class="data-value">{{ $profile->validity >= 1 ? "{$this->convertSeconds($profile->validity)}" : 'None' }}</span>
+                                </div>
+                            </div>
+                            <div class="card-actions-mobile">
+                                <a class="btn btn-action btn-action-edit"
+                                    href="{{ route('client.vouchers.profile.edit', $profile->id) }}">
+                                    <i class="fas fa-edit"></i>Edit
+                                </a>
+                                <button class="btn btn-action btn-action-delete"
+                                    wire:confirm.prompt="Are you sure?\nThis will delete all vouchers with this profile\n\nType {{ $profile->id }} to confirm|{{ $profile->id }}"
+                                    wire:click="deleteProfile({{ $profile->id }})">
+                                    <i class="fas fa-trash"></i>Delete
+                                </button>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="table-empty-state">
+                            <i class="fas fa-id-card"></i>
+                            <p>No profiles created yet</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                {{-- Desktop Table View --}}
+                <div class="table-responsive desktop-table-view">
                     <table class="table table-standard table-striped">
                         <thead>
                             <tr>

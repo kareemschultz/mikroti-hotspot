@@ -110,7 +110,97 @@
                     </div>
                 </div>
                 @endif
-                <div class="table-responsive">
+                {{-- Mobile Card View --}}
+                <div class="mobile-card-view">
+                    @forelse ($this->vouchers as $voucher)
+                        @php
+                            $status = $this->getVoucherStatus($voucher);
+                            $dataInfo = $this->getDataConsumed($voucher);
+                            $duration = $this->getUsageDuration($voucher);
+                        @endphp
+                        <div class="voucher-card-mobile">
+                            <div class="card-header-mobile">
+                                <div class="d-flex align-items-center">
+                                    <input type="checkbox" wire:model.live="selectedItems"
+                                        value="{{ $voucher->id }}" class="checkbox-standard mr-3">
+                                    <span class="voucher-code">{{ $voucher->code }}</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge badge-{{ $status['color'] }} mr-2">
+                                        <i class="fas fa-{{ $status['icon'] }} mr-1"></i>{{ $status['status'] }}
+                                    </span>
+                                    <x-partials.profile-badge 
+                                        :name="$voucher->profile_name" 
+                                        :uptime-limit="$voucher->uptime_limit ?? 0"
+                                        :data-limit="$voucher->data_limit ?? 0" />
+                                </div>
+                            </div>
+                            <div class="card-body-mobile">
+                                <div class="data-item">
+                                    <span class="data-label">Session Info</span>
+                                    <span class="data-value">
+                                        <small>
+                                            {{ $this->isRandomMac($voucher->mac_address) ? 'Random ' : '' }}MAC: {{ $voucher->mac_address ?? 'N/A' }}<br>
+                                            IP: {{ $voucher->ip_address ?? 'N/A' }}<br>
+                                            Router: {{ $voucher->router_ip ?? 'N/A' }}{{ $voucher->server_name ? " - {$voucher->server_name}" : '' }}
+                                        </small>
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Data Consumed</span>
+                                    <span class="data-value">
+                                        @if($voucher->data_limit > 0)
+                                            <span class="badge badge-info">
+                                                {{ $this->convertBytes($dataInfo['consumed']) }}
+                                            </span>
+                                            <br><small>{{ round($dataInfo['percentage'] ?? 0) }}% of {{ $this->convertBytes($voucher->data_limit) }}</small>
+                                        @else
+                                            <small>
+                                                ↓ {{ $this->convertBytes($voucher->session_download) }}<br>
+                                                ↑ {{ $this->convertBytes($voucher->session_upload) }}
+                                            </small>
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Duration</span>
+                                    <span class="data-value">
+                                        <span class="badge badge-secondary">
+                                            <i class="fas fa-hourglass-half mr-1"></i>{{ $duration }}
+                                        </span>
+                                        @if($voucher->uptime_limit > 0)
+                                        <br><small>Time left: {{ $this->convertSeconds($voucher->uptime_credit) }}</small>
+                                        @endif
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Price</span>
+                                    <span class="data-value">
+                                        <x-partials.price-display :price="$voucher->price" />
+                                    </span>
+                                </div>
+                                <div class="data-item">
+                                    <span class="data-label">Dates</span>
+                                    <span class="data-value">
+                                        <small>
+                                            Generated: {{ Illuminate\Support\Carbon::parse($voucher->generation_date)->format('M d, Y') }}<br>
+                                            Used: {{ $voucher->used_date ? Illuminate\Support\Carbon::parse($voucher->used_date)->format('M d, Y h:i A') : 'N/A' }}<br>
+                                            Expired: {{ $voucher->expire_date ? Illuminate\Support\Carbon::parse($voucher->expire_date)->format('M d, Y h:i A') : 'N/A' }}
+                                        </small>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="table-empty-state">
+                            <i class="fas fa-history"></i>
+                            <p>No used voucher records found</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                {{-- Desktop Table View --}}
+                <div class="table-responsive desktop-table-view">
                     <table class="table table-standard table-striped">
                         <thead>
                             <tr>

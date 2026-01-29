@@ -3,31 +3,33 @@
     @if($this->lowStockProfiles->count() > 0)
     <div class="col-12 mb-3" x-data="{ expanded: false }">
         <div class="alert alert-warning alert-dismissible fade show shadow-sm mb-0" role="alert">
-            <div class="d-flex align-items-center">
-                <i class="fas fa-exclamation-triangle fa-2x mr-3 text-warning"></i>
-                <div class="flex-grow-1">
-                    <div class="d-flex align-items-center alert-collapsible" @click="expanded = !expanded">
-                        <h6 class="alert-heading mb-0 font-weight-bold">
-                            <i class="fas fa-boxes mr-1"></i>
-                            ⚠️ {{ $this->lowStockProfiles->count() }} profile{{ $this->lowStockProfiles->count() > 1 ? 's' : '' }} low on stock
-                        </h6>
-                        <button type="button" class="btn btn-link btn-sm text-warning p-0 ml-2">
-                            <i class="fas fa-chevron-down alert-toggle" :class="{ 'rotated': expanded }"></i>
-                            <span x-text="expanded ? 'Hide Details' : 'View Details'"></span>
-                        </button>
-                    </div>
-                    <div class="alert-details mt-2" x-show="expanded" x-collapse>
-                        <p class="mb-0 small">
-                            Profiles with less than {{ $lowStockThreshold }} vouchers:
-                            <strong>
-                                @foreach($this->lowStockProfiles as $profile)
-                                    {{ $profile->name }} ({{ $profile->stock }}){{ !$loop->last ? ', ' : '' }}
-                                @endforeach
-                            </strong>
-                        </p>
+            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
+                <div class="d-flex align-items-start w-100">
+                    <i class="fas fa-exclamation-triangle fa-2x mr-3 text-warning"></i>
+                    <div class="flex-grow-1">
+                        <div class="d-flex align-items-center alert-collapsible" @click="expanded = !expanded">
+                            <h6 class="alert-heading mb-0 font-weight-bold">
+                                <i class="fas fa-boxes mr-1"></i>
+                                ⚠️ {{ $this->lowStockProfiles->count() }} profile{{ $this->lowStockProfiles->count() > 1 ? 's' : '' }} low on stock
+                            </h6>
+                            <button type="button" class="btn btn-link btn-sm text-warning p-0 ml-2">
+                                <i class="fas fa-chevron-down alert-toggle" :class="{ 'rotated': expanded }"></i>
+                                <span x-text="expanded ? 'Hide Details' : 'View Details'"></span>
+                            </button>
+                        </div>
+                        <div class="alert-details mt-2" x-show="expanded" x-collapse>
+                            <p class="mb-0 small">
+                                Profiles with less than {{ $lowStockThreshold }} vouchers:
+                                <strong>
+                                    @foreach($this->lowStockProfiles as $profile)
+                                        {{ $profile->name }} ({{ $profile->stock }}){{ !$loop->last ? ', ' : '' }}
+                                    @endforeach
+                                </strong>
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <a href="{{ route('client.voucher.generate') }}" class="btn btn-warning btn-sm ml-3">
+                <a href="{{ route('client.voucher.generate') }}" class="btn btn-warning mt-2 mt-md-0 ml-md-3 w-100 w-md-auto">
                     <i class="fas fa-plus mr-1"></i>Generate Now
                 </a>
             </div>
@@ -186,7 +188,42 @@
                         </a>
                     </div>
                     <div class="card-body pt-0 px-0 text-xs">
-                        <div class="table-responsive">
+                        {{-- Mobile Card View for Stock --}}
+                        <div class="mobile-card-view px-3">
+                            @foreach ($this->vouchers as $voucher)
+                                <div class="d-flex justify-content-between align-items-center py-2" style="border-bottom: 1px solid #f0f0f0;">
+                                    <div class="flex-grow-1">
+                                        <x-partials.profile-badge 
+                                            :name="$voucher->name" 
+                                            :uptime-limit="$voucher->uptime_limit ?? 0"
+                                            :data-limit="$voucher->data_limit ?? 0"
+                                            :validity="$voucher->validity ?? 0" />
+                                        <div class="small text-muted">Stock: <strong>{{ $voucher->stock }}</strong></div>
+                                    </div>
+                                    <div class="ml-2">
+                                        @if($voucher->stock == 0)
+                                            <span class="badge status-out">
+                                                <i class="fas fa-times-circle"></i> Out
+                                            </span>
+                                        @elseif($voucher->stock < $lowStockThreshold)
+                                            <span class="badge status-low">
+                                                <i class="fas fa-exclamation-circle"></i> Low
+                                            </span>
+                                        @else
+                                            <span class="badge status-ok">
+                                                <i class="fas fa-check-circle"></i> OK
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                            <div class="d-flex justify-content-end mt-2">
+                                {{ $this->vouchers->links() }}
+                            </div>
+                        </div>
+
+                        {{-- Desktop Table View for Stock --}}
+                        <div class="table-responsive desktop-table-view">
                             <table class="table table-standard table-striped mb-0">
                                 <thead>
                                     <tr>
@@ -225,9 +262,9 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>
-                        <div class="d-flex justify-content-end mt-2 px-2">
-                            {{ $this->vouchers->links() }}
+                            <div class="d-flex justify-content-end mt-2 px-2">
+                                {{ $this->vouchers->links() }}
+                            </div>
                         </div>
                     </div>
                 </div>
