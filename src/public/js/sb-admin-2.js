@@ -5,7 +5,8 @@
   $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
     $("body").toggleClass("sidebar-toggled");
     $(".sidebar").toggleClass("toggled");
-    if ($(".sidebar").hasClass("toggled")) {
+    // Only auto-close collapses on desktop when collapsing sidebar
+    if ($(".sidebar").hasClass("toggled") && $(window).width() > 991) {
       $('.sidebar .collapse').collapse('hide');
     };
   });
@@ -16,10 +17,10 @@
       $('.sidebar .collapse').collapse('hide');
     };
     
-    // Toggle the side navigation when window is resized below 480px
-    if ($(window).width() < 480 && !$(".sidebar").hasClass("toggled")) {
-      $("body").addClass("sidebar-toggled");
-      $(".sidebar").addClass("toggled");
+    // Close sidebar on mobile when resizing to small
+    if ($(window).width() < 480 && $(".sidebar").hasClass("toggled")) {
+      $("body").removeClass("sidebar-toggled");
+      $(".sidebar").removeClass("toggled");
       $('.sidebar .collapse').collapse('hide');
     };
   });

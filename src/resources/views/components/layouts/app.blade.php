@@ -192,38 +192,42 @@
     <!-- Mobile Responsiveness Helpers -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Sidebar overlay handling
-        const sidebar = document.querySelector('.sidebar');
-        const overlay = document.getElementById('sidebarOverlay');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebarToggleTop = document.getElementById('sidebarToggleTop');
+        var sidebar = document.querySelector('.sidebar');
+        var overlay = document.getElementById('sidebarOverlay');
+        var sidebarToggle = document.getElementById('sidebarToggle');
+        var sidebarToggleTop = document.getElementById('sidebarToggleTop');
         
-        function closeSidebarOnMobile() {
-            if (window.innerWidth <= 768) {
-                if (sidebar && !sidebar.classList.contains('toggled')) {
-                    sidebar.classList.add('toggled');
-                }
-                if (overlay) {
-                    overlay.classList.remove('show');
-                }
+        function isMobile() {
+            return window.innerWidth <= 991;
+        }
+        
+        function closeSidebar() {
+            if (sidebar) {
+                // On mobile, SB Admin 2 logic is inverted: toggled = visible
+                // We need to remove 'toggled' to hide
+                sidebar.classList.remove('toggled');
+                document.body.classList.remove('sidebar-toggled');
+            }
+            if (overlay) {
+                overlay.classList.remove('show');
             }
         }
         
-        function toggleSidebarOverlay() {
-            if (window.innerWidth <= 768 && overlay) {
-                if (sidebar && !sidebar.classList.contains('toggled')) {
-                    overlay.classList.add('show');
-                } else {
-                    overlay.classList.remove('show');
-                }
+        function updateOverlay() {
+            if (!isMobile() || !overlay) return;
+            // On mobile: sidebar.toggled = visible
+            if (sidebar && sidebar.classList.contains('toggled')) {
+                overlay.classList.add('show');
+            } else {
+                overlay.classList.remove('show');
             }
         }
         
-        // Toggle buttons
+        // Watch for toggle button clicks
         [sidebarToggle, sidebarToggleTop].forEach(function(btn) {
             if (btn) {
                 btn.addEventListener('click', function() {
-                    setTimeout(toggleSidebarOverlay, 50);
+                    setTimeout(updateOverlay, 50);
                 });
             }
         });
@@ -231,28 +235,34 @@
         // Close sidebar when clicking overlay
         if (overlay) {
             overlay.addEventListener('click', function() {
-                if (sidebar) {
-                    sidebar.classList.add('toggled');
-                }
-                overlay.classList.remove('show');
+                closeSidebar();
             });
         }
         
-        // Close sidebar on mobile when clicking a nav link
-        document.querySelectorAll('.sidebar .nav-link').forEach(function(link) {
-            link.addEventListener('click', closeSidebarOnMobile);
+        // Close sidebar when a non-collapsible nav link is clicked on mobile
+        document.querySelectorAll('.sidebar .nav-link:not([data-toggle="collapse"])').forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (isMobile()) {
+                    closeSidebar();
+                }
+            });
+        });
+        
+        // Close sidebar when a collapse sub-item is clicked on mobile
+        document.querySelectorAll('.sidebar .collapse-item').forEach(function(item) {
+            item.addEventListener('click', function() {
+                if (isMobile()) {
+                    closeSidebar();
+                }
+            });
         });
         
         // Handle window resize
         window.addEventListener('resize', function() {
-            if (window.innerWidth > 768 && overlay) {
+            if (!isMobile() && overlay) {
                 overlay.classList.remove('show');
             }
         });
-        
-        // Touch swipe detection for cards
-        let touchStartX = 0;
-        window.touchStartX = touchStartX;
     });
     </script>
     @stack('scripts-bottom')
