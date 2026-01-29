@@ -50,6 +50,25 @@
     <!-- UI/UX Refinements -->
     <link href="{{ asset('css/custom.css') }}?v={{ filemtime(public_path('css/custom.css')) }}" rel="stylesheet">
 
+    <!-- Mobile Sidebar Fix (inline to bypass CSS caching) -->
+    <style>
+    @media (max-width: 991px) {
+        .sidebar { width: 0 !important; overflow: hidden !important; }
+        .sidebar.toggled { width: 14rem !important; overflow: visible !important; overflow-y: auto !important; }
+        .sidebar.toggled .nav-item .nav-link { display: block !important; width: 100% !important; text-align: left !important; padding: 0.75rem 1rem !important; }
+        .sidebar.toggled .nav-item .nav-link i { font-size: 0.85rem !important; margin-right: 0.25rem !important; }
+        .sidebar.toggled .nav-item .nav-link span { font-size: 0.85rem !important; display: inline !important; }
+        .sidebar.toggled .nav-item .collapse { position: relative !important; left: 0 !important; top: 0 !important; z-index: 1 !important; animation: none !important; -webkit-animation: none !important; margin: 0 1rem !important; }
+        .sidebar.toggled .nav-item .collapse .collapse-inner { border-radius: 0 !important; box-shadow: none !important; }
+        .sidebar.toggled .nav-item .collapsing { display: block !important; transition: height 0.15s ease !important; position: relative !important; left: 0 !important; top: 0 !important; margin: 0 1rem !important; }
+        .sidebar.toggled .nav-item .collapsing .collapse-inner { border-radius: 0 !important; box-shadow: none !important; }
+        .sidebar.toggled .nav-item .nav-link[data-toggle="collapse"]::after { width: 1rem; text-align: center; float: right; font-weight: 900; content: '\f107'; font-family: 'Font Awesome 5 Free'; display: inline-block !important; }
+        .sidebar.toggled .nav-item .nav-link[data-toggle="collapse"].collapsed::after { content: '\f105'; }
+        .sidebar.toggled .sidebar-brand .sidebar-brand-text { display: inline !important; }
+        .sidebar.toggled .sidebar-heading { text-align: left !important; }
+    }
+    </style>
+
     {{-- Dynamic Brand Colors --}}
     <style>
         :root {
@@ -188,6 +207,20 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('js/sb-admin-2.min.js') }}?v={{ filemtime(public_path('js/sb-admin-2.min.js')) }}"></script>
+    
+    <!-- Mobile sidebar toggle fix (inline to bypass JS caching) -->
+    <script>
+    (function(){
+        // On mobile, SB Admin 2 default: sidebar visible at 6.5rem, toggled=hidden.
+        // We invert: default=hidden (CSS width:0), toggled=visible (14rem).
+        // On page load for mobile, ensure sidebar starts without .toggled (hidden).
+        if (window.innerWidth <= 991) {
+            var sb = document.querySelector('.sidebar');
+            if (sb) sb.classList.remove('toggled');
+            document.body.classList.remove('sidebar-toggled');
+        }
+    })();
+    </script>
     
     <!-- Mobile Responsiveness Helpers -->
     <script>
